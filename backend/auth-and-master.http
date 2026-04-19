@@ -1,0 +1,157 @@
+@baseUrl = http://localhost:8080/api
+@token = your_token_here
+
+### Login — Admin
+# @name loginAdmin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@vehicle.com",
+    "password": "password"
+}
+
+### Login — Approver 1
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "approver1@vehicle.com",
+    "password": "password"
+}
+
+### Login — Approver 2
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "approver2@vehicle.com",
+    "password": "password"
+}
+
+### Logout
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{token}}
+
+# =============================================================================
+# USERS
+# =============================================================================
+
+### Get All Users
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### Create User — Approver
+POST {{baseUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Approver Baru",
+    "email": "approver3@vehicle.com",
+    "password": "password",
+    "role": "approver",
+    "approval_level": 1
+}
+
+### Create User — Admin
+POST {{baseUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Admin Baru",
+    "email": "admin2@vehicle.com",
+    "password": "password",
+    "role": "admin",
+    "approval_level": null
+}
+
+### Update User
+PUT {{baseUrl}}/users/4
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Approver Baru Edited"
+}
+
+### Delete User
+DELETE {{baseUrl}}/users/4
+Authorization: Bearer {{token}}
+
+# =============================================================================
+# VEHICLES
+# =============================================================================
+
+### Get All Vehicles
+GET {{baseUrl}}/vehicles
+Authorization: Bearer {{token}}
+
+### Get Vehicles — Filter by Status
+GET {{baseUrl}}/vehicles?status=available
+Authorization: Bearer {{token}}
+
+### Create Vehicle
+POST {{baseUrl}}/vehicles
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Toyota Land Cruiser",
+    "plate_number": "BG 9999 ZZZ",
+    "type": "passenger",
+    "ownership": "own",
+    "region": "Sulawesi Tenggara",
+    "status": "available"
+}
+
+### Update Vehicle
+PUT {{baseUrl}}/vehicles/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "status": "maintenance"
+}
+
+### Delete Vehicle
+DELETE {{baseUrl}}/vehicles/7
+Authorization: Bearer {{token}}
+
+# =============================================================================
+# DRIVERS
+# =============================================================================
+
+### Get All Drivers
+GET {{baseUrl}}/drivers
+Authorization: Bearer {{token}}
+
+### Get Drivers — Filter by Status
+GET {{baseUrl}}/drivers?status=active
+Authorization: Bearer {{token}}
+
+### Create Driver
+POST {{baseUrl}}/drivers
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Slamet Riyadi",
+    "license_number": "SIM-A-0099999",
+    "phone": "+6281999888777",
+    "status": "active"
+}
+
+### Update Driver
+PUT {{baseUrl}}/drivers/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "status": "inactive"
+}
+
+### Delete Driver
+DELETE {{baseUrl}}/drivers/5
+Authorization: Bearer {{token}}

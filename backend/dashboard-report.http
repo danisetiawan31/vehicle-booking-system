@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:8080/api
+@token = your_token_here
+
+### Dashboard — Admin
+GET {{baseUrl}}/dashboard
+Authorization: Bearer {{token}}
+
+### Dashboard — Approver
+GET {{baseUrl}}/dashboard
+Authorization: Bearer {{token}}
+
+# =============================================================================
+# REPORTS
+# =============================================================================
+
+### Report — All Status
+GET {{baseUrl}}/reports?start_date=2026-01-01&end_date=2026-12-31
+Authorization: Bearer {{token}}
+
+### Report — Filter by Status
+GET {{baseUrl}}/reports?start_date=2026-01-01&end_date=2026-12-31&status=approved
+Authorization: Bearer {{token}}
+
+### Report — Missing date params (expect 422)
+GET {{baseUrl}}/reports
+Authorization: Bearer {{token}}
+
+### Export Excel
+GET {{baseUrl}}/reports/export?start_date=2026-01-01&end_date=2026-12-31
+Authorization: Bearer {{token}}
+
+### Export Excel — Filter by Status
+GET {{baseUrl}}/reports/export?start_date=2026-01-01&end_date=2026-12-31&status=approved
+Authorization: Bearer {{token}}

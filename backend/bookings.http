@@ -1,0 +1,71 @@
+@baseUrl = http://localhost:8080/api
+@token = your_token_here
+@bookingId = 1
+
+### Get All Bookings — Admin / Approver
+GET {{baseUrl}}/bookings
+Authorization: Bearer {{token}}
+
+### Get Booking Detail
+GET {{baseUrl}}/bookings/{{bookingId}}
+Authorization: Bearer {{token}}
+
+### Create Booking
+POST {{baseUrl}}/bookings
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "vehicle_id": 1,
+    "driver_id": 1,
+    "requester_name": "Budi Hartono",
+    "purpose": "Kunjungan lapangan ke site tambang",
+    "destination": "Site Tambang Blok B, Morowali",
+    "start_date": "2026-05-01 08:00:00",
+    "end_date": "2026-05-02 08:00:00",
+    "approver_level1_id": 2,
+    "approver_level2_id": 3
+}
+
+### Approve Booking — Approver
+POST {{baseUrl}}/bookings/{{bookingId}}/approve
+Authorization: Bearer {{token}}
+
+### Reject Booking — Approver (notes wajib)
+POST {{baseUrl}}/bookings/{{bookingId}}/reject
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "notes": "Kendaraan sedang dibutuhkan unit lain pada periode tersebut."
+}
+
+# =============================================================================
+# EDGE CASES
+# =============================================================================
+
+### Create Booking — Validation Error (missing fields)
+POST {{baseUrl}}/bookings
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "vehicle_id": 1
+}
+
+### Create Booking — Self-approval (approver_level1_id = admin id)
+POST {{baseUrl}}/bookings
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "vehicle_id": 1,
+    "driver_id": 1,
+    "requester_name": "Test Self Approval",
+    "purpose": "Test",
+    "destination": "Test",
+    "start_date": "2026-05-03 08:00:00",
+    "end_date": "2026-05-04 08:00:00",
+    "approver_level1_id": 1,
+    "approver_level2_id": 3
+}

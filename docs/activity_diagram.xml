@@ -1,0 +1,274 @@
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="2200" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- TITLE -->
+    <mxCell id="title" value="Activity Diagram — Fitur Pemesanan Kendaraan" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+      <mxGeometry x="40" y="20" width="1000" height="45" as="geometry" />
+    </mxCell>
+
+    <!-- ===== SWIMLANES ===== -->
+    <mxCell id="LA" value="Admin" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="40" y="75" width="250" height="2100" as="geometry" />
+    </mxCell>
+    <mxCell id="LS" value="Sistem" style="swimlane;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="290" y="75" width="250" height="2100" as="geometry" />
+    </mxCell>
+    <mxCell id="L1" value="Approver Level 1" style="swimlane;startSize=30;fillColor=#ffe6cc;strokeColor=#d6b656;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="540" y="75" width="250" height="2100" as="geometry" />
+    </mxCell>
+    <mxCell id="L2" value="Approver Level 2" style="swimlane;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="790" y="75" width="250" height="2100" as="geometry" />
+    </mxCell>
+
+    <!-- ===== ADMIN LANE ===== -->
+    <mxCell id="A0" value="" style="ellipse;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="LA">
+      <mxGeometry x="110" y="50" width="30" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="A1" value="Login ke Aplikasi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="LA">
+      <mxGeometry x="20" y="110" width="210" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="A2" value="Buka Form Buat Booking" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="LA">
+      <mxGeometry x="20" y="185" width="210" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="A3" value="Input Data Booking&#xa;(pemohon, kendaraan, driver,&#xa;tujuan, keperluan, tanggal)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="LA">
+      <mxGeometry x="20" y="260" width="210" height="55" as="geometry" />
+    </mxCell>
+    <mxCell id="A4" value="Pilih Approver Level 1&#xa;&amp; Level 2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="LA">
+      <mxGeometry x="20" y="355" width="210" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="A5" value="Submit Booking" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="LA">
+      <mxGeometry x="20" y="430" width="210" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ===== SISTEM LANE ===== -->
+
+    <!-- Phase 1: Validation & Save -->
+    <mxCell id="S1" value="Validasi Input &amp; Business Rules&#xa;(self-approval, format, required)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="430" width="210" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="S2" value="Valid?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="LS">
+      <mxGeometry x="75" y="510" width="100" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="S2E" value="Return Error&#xa;422" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="165" y="525" width="75" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="S3" value="Cek Ketersediaan&#xa;Kendaraan &amp; Driver&#xa;(overlap check)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="620" width="210" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="S4" value="Tersedia?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="LS">
+      <mxGeometry x="75" y="705" width="100" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="S4E" value="Return Conflict&#xa;Error 409" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="165" y="720" width="75" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="S5" value="Generate Booking Code&#xa;(BK-YYYYMMDD-XXXX)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="815" width="210" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="S6" value="Simpan Booking&#xa;(status: waiting_level_1)&#xa;Buat 2 Approval Records (pending)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="890" width="210" height="55" as="geometry" />
+    </mxCell>
+    <mxCell id="S7" value="Catat Log: booking.created" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="980" width="210" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- Phase 2: After L1 Approve -->
+    <mxCell id="S8" value="Update Booking → waiting_level_2&#xa;Update Approval L1 → approved" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="1185" width="210" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="S9" value="Catat Log: booking.approved (Level 1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="1265" width="210" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- Phase 2: After L1 Reject -->
+    <mxCell id="S10" value="Update Booking → rejected&#xa;Update Approval L1 → rejected" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="1390" width="210" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="S11" value="Catat Log: booking.rejected (Level 1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="1465" width="210" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="EndRej1" value="Booking Ditolak (Final)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="50" y="1535" width="150" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- Phase 3: After L2 Approve -->
+    <mxCell id="S12" value="Update Booking → approved&#xa;Update Approval L2 → approved" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="1630" width="210" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="S13" value="Catat Log: booking.approved (Level 2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="1705" width="210" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="EndApproved" value="Booking Disetujui (Final)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="50" y="1775" width="150" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- Phase 3: After L2 Reject -->
+    <mxCell id="S14" value="Update Booking → rejected&#xa;Update Approval L2 → rejected" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="1845" width="210" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="S15" value="Catat Log: booking.rejected (Level 2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="20" y="1920" width="210" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="EndRej2" value="Booking Ditolak (Final)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;fontSize=10;" vertex="1" parent="LS">
+      <mxGeometry x="50" y="1990" width="150" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ===== APPROVER LEVEL 1 LANE ===== -->
+    <mxCell id="L1A" value="Lihat Daftar Booking Pending&#xa;(yang di-assign ke saya)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="L1">
+      <mxGeometry x="20" y="1060" width="210" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="L1B" value="Review Detail Booking" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="L1">
+      <mxGeometry x="20" y="1140" width="210" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="L1C" value="Setujui?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="L1">
+      <mxGeometry x="75" y="1215" width="100" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="L1D" value="Input Alasan Penolakan&#xa;(notes wajib diisi)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="L1">
+      <mxGeometry x="20" y="1340" width="210" height="45" as="geometry" />
+    </mxCell>
+
+    <!-- ===== APPROVER LEVEL 2 LANE ===== -->
+    <mxCell id="L2A" value="Lihat &amp; Review Detail Booking&#xa;(status: waiting_level_2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="L2">
+      <mxGeometry x="20" y="1360" width="210" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="L2B" value="Setujui?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="L2">
+      <mxGeometry x="75" y="1440" width="100" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="L2C" value="Input Alasan Penolakan&#xa;(notes wajib diisi)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="L2">
+      <mxGeometry x="20" y="1570" width="210" height="45" as="geometry" />
+    </mxCell>
+
+    <!-- ===== EDGES ===== -->
+
+    <!-- Admin internal flow -->
+    <mxCell id="e_A0A1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="A0" target="A1" parent="LA">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_A1A2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="A1" target="A2" parent="LA">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_A2A3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="A2" target="A3" parent="LA">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_A3A4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="A3" target="A4" parent="LA">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_A4A5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="A4" target="A5" parent="LA">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Admin Submit → Sistem Validasi (cross-lane) -->
+    <mxCell id="e_A5S1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="A5" target="S1" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Sistem Phase 1 internal -->
+    <mxCell id="e_S1S2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S1" target="S2" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S2E" value="Tidak" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" source="S2" target="S2E" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S2S3" value="Ya" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" source="S2" target="S3" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S2EA3" value="Kembali ke form" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="S2E" target="A3" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S3S4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S3" target="S4" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S4E" value="Tidak" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" source="S4" target="S4E" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S4S5" value="Ya" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" source="S4" target="S5" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S4EA3" value="Kembali ke form" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="S4E" target="A3" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S5S6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S5" target="S6" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S6S7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S6" target="S7" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- S7 → L1A (cross-lane) -->
+    <mxCell id="e_S7L1A" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S7" target="L1A" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- L1 internal flow -->
+    <mxCell id="e_L1AB" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="L1A" target="L1B" parent="L1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_L1BC" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="L1B" target="L1C" parent="L1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- L1C Ya → S8 (cross-lane) -->
+    <mxCell id="e_L1CYa" value="Setujui" style="edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" source="L1C" target="S8" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- L1C Tolak → L1D -->
+    <mxCell id="e_L1CTolak" value="Tolak" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" source="L1C" target="L1D" parent="L1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- L1D → S10 (cross-lane) -->
+    <mxCell id="e_L1DS10" style="edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" source="L1D" target="S10" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Sistem Phase 2: L1 Approve path -->
+    <mxCell id="e_S8S9" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S8" target="S9" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- S9 → L2A (cross-lane) -->
+    <mxCell id="e_S9L2A" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S9" target="L2A" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Sistem Phase 2: L1 Reject path -->
+    <mxCell id="e_S10S11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S10" target="S11" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S11E1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S11" target="EndRej1" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- L2 internal flow -->
+    <mxCell id="e_L2AB" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="L2A" target="L2B" parent="L2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- L2B Ya → S12 (cross-lane) -->
+    <mxCell id="e_L2BYa" value="Setujui" style="edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" source="L2B" target="S12" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- L2B Tolak → L2C -->
+    <mxCell id="e_L2BTolak" value="Tolak" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" source="L2B" target="L2C" parent="L2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <!-- L2C → S14 (cross-lane) -->
+    <mxCell id="e_L2CS14" style="edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" source="L2C" target="S14" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Sistem Phase 3: L2 Approve path -->
+    <mxCell id="e_S12S13" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S12" target="S13" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S13End" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S13" target="EndApproved" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Sistem Phase 3: L2 Reject path -->
+    <mxCell id="e_S14S15" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S14" target="S15" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e_S15E2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="S15" target="EndRej2" parent="LS">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
