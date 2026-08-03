@@ -12,38 +12,38 @@ class CreateBookingsTable extends Migration
     {
         $this->forge->addField([
             'id' => [
-                'type'           => 'BIGINT',
-                'constraint'     => 20,
-                'unsigned'       => true,
+                'type' => 'BIGINT',
+                'constraint' => 20,
+                'unsigned' => true,
                 'auto_increment' => true,
             ],
             'booking_code' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 20,
-                'null'       => false,
+                'null' => false,
             ],
             'admin_id' => [
-                'type'     => 'BIGINT',
+                'type' => 'BIGINT',
                 'constraint' => 20,
                 'unsigned' => true,
-                'null'     => false,
+                'null' => false,
             ],
             'vehicle_id' => [
-                'type'     => 'BIGINT',
+                'type' => 'BIGINT',
                 'constraint' => 20,
                 'unsigned' => true,
-                'null'     => false,
+                'null' => false,
             ],
             'driver_id' => [
-                'type'     => 'BIGINT',
+                'type' => 'BIGINT',
                 'constraint' => 20,
                 'unsigned' => true,
-                'null'     => false,
+                'null' => false,
             ],
             'requester_name' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 100,
-                'null'       => false,
+                'null' => false,
             ],
             'purpose' => [
                 'type' => 'TEXT',
@@ -62,8 +62,9 @@ class CreateBookingsTable extends Migration
                 'null' => false,
             ],
             'status' => [
-                'type'    => "ENUM('waiting_level_1','waiting_level_2','approved','rejected')",
-                'null'    => false,
+                'type' => 'ENUM',
+                'constraint' => ['waiting_level_1', 'waiting_level_2', 'approved', 'rejected'],
+                'null' => false,
                 'default' => 'waiting_level_1',
             ],
             'created_at' => [

@@ -28,12 +28,14 @@ class CreateVehiclesTable extends Migration
                 'null'       => false,
             ],
             'type' => [
-                'type' => "ENUM('passenger','cargo')",
-                'null' => false,
+                'type'       => 'ENUM',
+                'constraint' => ['passenger', 'cargo'],
+                'null'       => false,
             ],
             'ownership' => [
-                'type' => "ENUM('own','rental')",
-                'null' => false,
+                'type'       => 'ENUM',
+                'constraint' => ['own', 'rental'],
+                'null'       => false,
             ],
             'region' => [
                 'type'       => 'VARCHAR',
@@ -41,9 +43,10 @@ class CreateVehiclesTable extends Migration
                 'null'       => false,
             ],
             'status' => [
-                'type'    => "ENUM('available','maintenance','inactive')",
-                'null'    => false,
-                'default' => 'available',
+                'type'       => 'ENUM',
+                'constraint' => ['available', 'maintenance', 'inactive'],
+                'null'       => false,
+                'default'    => 'available',
             ],
             'created_at' => [
                 'type' => 'DATETIME',

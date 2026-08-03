@@ -218,6 +218,15 @@ class UserController extends Controller
                 }
                 $updateData['approval_level'] = (int)$level;
             } else {
+                if (isset($json['approval_level']) && $json['approval_level'] !== null) {
+                    return $this->response
+                        ->setStatusCode(422)
+                        ->setJSON([
+                            'status'  => false,
+                            'message' => 'Validation failed',
+                            'errors'  => ['approval_level' => 'Admin role must not have an approval level.'],
+                        ]);
+                }
                 $updateData['approval_level'] = null;
             }
         }

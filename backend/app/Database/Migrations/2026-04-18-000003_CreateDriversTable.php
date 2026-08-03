@@ -12,29 +12,30 @@ class CreateDriversTable extends Migration
     {
         $this->forge->addField([
             'id' => [
-                'type'           => 'BIGINT',
-                'constraint'     => 20,
-                'unsigned'       => true,
+                'type' => 'BIGINT',
+                'constraint' => 20,
+                'unsigned' => true,
                 'auto_increment' => true,
             ],
             'name' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 100,
-                'null'       => false,
+                'null' => false,
             ],
             'license_number' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 50,
-                'null'       => false,
+                'null' => false,
             ],
             'phone' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => 20,
-                'null'       => false,
+                'null' => false,
             ],
             'status' => [
-                'type'    => "ENUM('active','inactive')",
-                'null'    => false,
+                'type' => 'ENUM',
+                'constraint' => ['active', 'inactive'],
+                'null' => false,
                 'default' => 'active',
             ],
             'created_at' => [

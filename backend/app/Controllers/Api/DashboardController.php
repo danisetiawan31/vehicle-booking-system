@@ -109,9 +109,13 @@ class DashboardController extends Controller
     // -------------------------------------------------------------------------
     private function buildApproverDashboard($db, int $approverId): array
     {
-        $pendingForMe = (int)$db->table('booking_approvals')
-            ->where('approver_id', $approverId)
-            ->where('status', 'pending')
+        $turnFilter = '((ba.level = 1 AND b.status = "waiting_level_1") OR (ba.level = 2 AND b.status = "waiting_level_2"))';
+
+        $pendingForMe = (int)$db->table('booking_approvals ba')
+            ->join('bookings b', 'b.id = ba.booking_id')
+            ->where('ba.approver_id', $approverId)
+            ->where('ba.status', 'pending')
+            ->where($turnFilter)
             ->countAllResults();
 
         $pendingBookings = $db->table('booking_approvals ba')
@@ -125,6 +129,7 @@ class DashboardController extends Controller
             ->join('drivers d', 'd.id = b.driver_id')
             ->where('ba.approver_id', $approverId)
             ->where('ba.status', 'pending')
+            ->where($turnFilter)
             ->orderBy('b.created_at', 'DESC')
             ->get()->getResultArray();
 

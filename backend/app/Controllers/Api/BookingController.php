@@ -72,7 +72,21 @@ class BookingController extends Controller
     // -------------------------------------------------------------------------
     public function show($id)
     {
+        $authUser = $this->getAuthUser();
         $db = Database::connect();
+
+        if ($authUser['role'] === 'approver') {
+            $isAssigned = $db->table('booking_approvals')
+                ->where('booking_id', $id)
+                ->where('approver_id', $authUser['id'])
+                ->countAllResults() > 0;
+
+            if (!$isAssigned) {
+                return $this->response
+                    ->setStatusCode(403)
+                    ->setJSON(['status' => false, 'message' => 'Forbidden', 'data' => null]);
+            }
+        }
 
         $booking = $db->table('bookings b')
             ->select('b.*')
@@ -217,6 +231,11 @@ class BookingController extends Controller
             $errors['approver_level2_id'] = 'Admin cannot approve their own booking (level 2).';
         }
 
+        // Approvers must not be the same user
+        if ((int)$json['approver_level1_id'] === (int)$json['approver_level2_id']) {
+            $errors['approver_level2_id'] = 'Approver level 1 and level 2 cannot be the same user.';
+        }
+
         if (!empty($errors)) {
             return $this->response
                 ->setStatusCode(422)
@@ -268,67 +287,70 @@ class BookingController extends Controller
                 ->setJSON(['status' => false, 'message' => 'Forbidden', 'data' => null]);
         }
 
-        $bookingModel = new BookingModel();
-        $booking = $bookingModel->find($id);
-
-        if (!$booking) {
-            return $this->response
-                ->setStatusCode(404)
-                ->setJSON(['status' => false, 'message' => 'Booking not found', 'data' => null]);
-        }
-
-        $approvalModel = new BookingApprovalModel();
-        $approval = $approvalModel
-            ->where('booking_id', $id)
-            ->where('approver_id', $authUser['id'])
-            ->first();
-
-        if (!$approval) {
-            return $this->response
-                ->setStatusCode(404)
-                ->setJSON(['status' => false, 'message' => 'You are not assigned to this booking.', 'data' => null]);
-        }
-
-        // Check already acted
-        if ($approval['status'] !== 'pending') {
-            return $this->response
-                ->setStatusCode(422)
-                ->setJSON([
-                    'status'  => false,
-                    'message' => 'Validation failed',
-                    'errors'  => ['booking' => 'This booking has already been acted upon.'],
-                ]);
-        }
-
-        // Check turn
-        $level = (int)$approval['level'];
-        $expectedStatus = $level === 1 ? 'waiting_level_1' : 'waiting_level_2';
-        if ($booking['status'] !== $expectedStatus) {
-            return $this->response
-                ->setStatusCode(422)
-                ->setJSON([
-                    'status'  => false,
-                    'message' => 'Validation failed',
-                    'errors'  => ['booking' => 'It is not your turn to approve.'],
-                ]);
-        }
-
-        $now = date('Y-m-d H:i:s');
-        $newBookingStatus = $level === 1 ? 'waiting_level_2' : 'approved';
-
         $db = Database::connect();
-        $db->transStart();
+        $db->transBegin();
 
-        $approvalModel->update($approval['id'], [
-            'status'   => 'approved',
-            'acted_at' => $now,
-        ]);
+        try {
+            $booking = $db->query("SELECT * FROM bookings WHERE id = ? FOR UPDATE", [$id])->getRowArray();
 
-        $bookingModel->update($id, ['status' => $newBookingStatus]);
+            if (!$booking) {
+                $db->transRollback();
+                return $this->response
+                    ->setStatusCode(404)
+                    ->setJSON(['status' => false, 'message' => 'Booking not found', 'data' => null]);
+            }
 
-        $db->transComplete();
+            $approval = $db->query("SELECT * FROM booking_approvals WHERE booking_id = ? AND approver_id = ? FOR UPDATE", [$id, $authUser['id']])->getRowArray();
 
-        if ($db->transStatus() === false) {
+            if (!$approval) {
+                $db->transRollback();
+                return $this->response
+                    ->setStatusCode(404)
+                    ->setJSON(['status' => false, 'message' => 'You are not assigned to this booking.', 'data' => null]);
+            }
+
+            // Check already acted
+            if ($approval['status'] !== 'pending') {
+                $db->transRollback();
+                return $this->response
+                    ->setStatusCode(422)
+                    ->setJSON([
+                        'status'  => false,
+                        'message' => 'Validation failed',
+                        'errors'  => ['booking' => 'This booking has already been acted upon.'],
+                    ]);
+            }
+
+            // Check turn
+            $level = (int)$approval['level'];
+            $expectedStatus = $level === 1 ? 'waiting_level_1' : 'waiting_level_2';
+            if ($booking['status'] !== $expectedStatus) {
+                $db->transRollback();
+                return $this->response
+                    ->setStatusCode(422)
+                    ->setJSON([
+                        'status'  => false,
+                        'message' => 'Validation failed',
+                        'errors'  => ['booking' => 'It is not your turn to approve.'],
+                    ]);
+            }
+
+            $now = date('Y-m-d H:i:s');
+            $newBookingStatus = $level === 1 ? 'waiting_level_2' : 'approved';
+
+            $approvalModel = new BookingApprovalModel();
+            $bookingModel = new BookingModel();
+
+            $approvalModel->update($approval['id'], [
+                'status'   => 'approved',
+                'acted_at' => $now,
+            ]);
+
+            $bookingModel->update($id, ['status' => $newBookingStatus]);
+
+            $db->transCommit();
+        } catch (\Throwable $e) {
+            $db->transRollback();
             return $this->response
                 ->setStatusCode(500)
                 ->setJSON(['status' => false, 'message' => 'Database error occurred.', 'data' => null]);
@@ -362,49 +384,6 @@ class BookingController extends Controller
                 ->setJSON(['status' => false, 'message' => 'Forbidden', 'data' => null]);
         }
 
-        $bookingModel = new BookingModel();
-        $booking = $bookingModel->find($id);
-
-        if (!$booking) {
-            return $this->response
-                ->setStatusCode(404)
-                ->setJSON(['status' => false, 'message' => 'Booking not found', 'data' => null]);
-        }
-
-        $approvalModel = new BookingApprovalModel();
-        $approval = $approvalModel
-            ->where('booking_id', $id)
-            ->where('approver_id', $authUser['id'])
-            ->first();
-
-        if (!$approval) {
-            return $this->response
-                ->setStatusCode(404)
-                ->setJSON(['status' => false, 'message' => 'You are not assigned to this booking.', 'data' => null]);
-        }
-
-        // Check already acted
-        if ($approval['status'] !== 'pending') {
-            return $this->response
-                ->setStatusCode(422)
-                ->setJSON([
-                    'status'  => false,
-                    'message' => 'Validation failed',
-                    'errors'  => ['booking' => 'This booking has already been acted upon.'],
-                ]);
-        }
-
-        // Check booking still actionable
-        if (!in_array($booking['status'], ['waiting_level_1', 'waiting_level_2'], true)) {
-            return $this->response
-                ->setStatusCode(422)
-                ->setJSON([
-                    'status'  => false,
-                    'message' => 'Validation failed',
-                    'errors'  => ['booking' => 'This booking has already been acted upon.'],
-                ]);
-        }
-
         // Require notes for rejection
         $json = $this->request->getJSON(true) ?? [];
         $notes = trim($json['notes'] ?? '');
@@ -418,23 +397,69 @@ class BookingController extends Controller
                 ]);
         }
 
-        $level = (int)$approval['level'];
-        $now = date('Y-m-d H:i:s');
-
         $db = Database::connect();
-        $db->transStart();
+        $db->transBegin();
 
-        $approvalModel->update($approval['id'], [
-            'status'   => 'rejected',
-            'notes'    => $notes,
-            'acted_at' => $now,
-        ]);
+        try {
+            $booking = $db->query("SELECT * FROM bookings WHERE id = ? FOR UPDATE", [$id])->getRowArray();
 
-        $bookingModel->update($id, ['status' => 'rejected']);
+            if (!$booking) {
+                $db->transRollback();
+                return $this->response
+                    ->setStatusCode(404)
+                    ->setJSON(['status' => false, 'message' => 'Booking not found', 'data' => null]);
+            }
 
-        $db->transComplete();
+            $approval = $db->query("SELECT * FROM booking_approvals WHERE booking_id = ? AND approver_id = ? FOR UPDATE", [$id, $authUser['id']])->getRowArray();
 
-        if ($db->transStatus() === false) {
+            if (!$approval) {
+                $db->transRollback();
+                return $this->response
+                    ->setStatusCode(404)
+                    ->setJSON(['status' => false, 'message' => 'You are not assigned to this booking.', 'data' => null]);
+            }
+
+            // Check already acted
+            if ($approval['status'] !== 'pending') {
+                $db->transRollback();
+                return $this->response
+                    ->setStatusCode(422)
+                    ->setJSON([
+                        'status'  => false,
+                        'message' => 'Validation failed',
+                        'errors'  => ['booking' => 'This booking has already been acted upon.'],
+                    ]);
+            }
+
+            // Check booking still actionable
+            if (!in_array($booking['status'], ['waiting_level_1', 'waiting_level_2'], true)) {
+                $db->transRollback();
+                return $this->response
+                    ->setStatusCode(422)
+                    ->setJSON([
+                        'status'  => false,
+                        'message' => 'Validation failed',
+                        'errors'  => ['booking' => 'This booking has already been acted upon.'],
+                    ]);
+            }
+
+            $level = (int)$approval['level'];
+            $now = date('Y-m-d H:i:s');
+
+            $approvalModel = new BookingApprovalModel();
+            $bookingModel = new BookingModel();
+
+            $approvalModel->update($approval['id'], [
+                'status'   => 'rejected',
+                'notes'    => $notes,
+                'acted_at' => $now,
+            ]);
+
+            $bookingModel->update($id, ['status' => 'rejected']);
+
+            $db->transCommit();
+        } catch (\Throwable $e) {
+            $db->transRollback();
             return $this->response
                 ->setStatusCode(500)
                 ->setJSON(['status' => false, 'message' => 'Database error occurred.', 'data' => null]);

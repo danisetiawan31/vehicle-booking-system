@@ -5,14 +5,22 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use RuntimeException;
+
 class JwtService
 {
-    public function generate(array $payload): string
+    private function getSecret(): string
     {
         $secret = getenv('jwt.secret');
-        if (!$secret) {
-            $secret = ''; // Fallback or handle missing secret
+        if ($secret === false || $secret === null || trim((string)$secret) === '') {
+            throw new RuntimeException('JWT secret key is not configured.');
         }
+        return (string)$secret;
+    }
+
+    public function generate(array $payload): string
+    {
+        $secret = $this->getSecret();
 
         $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
         $payload['exp'] = time() + 86400; // 24 hours
@@ -29,10 +37,7 @@ class JwtService
 
     public function verify(string $token): array|false
     {
-        $secret = getenv('jwt.secret');
-        if (!$secret) {
-            $secret = '';
-        }
+        $secret = $this->getSecret();
 
         $parts = explode('.', $token);
         if (count($parts) !== 3) {

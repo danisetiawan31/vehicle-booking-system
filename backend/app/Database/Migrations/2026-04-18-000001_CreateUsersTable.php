@@ -33,7 +33,8 @@ class CreateUsersTable extends Migration
                 'null'       => false,
             ],
             'role' => [
-                'type'       => "ENUM('admin','approver')",
+                'type'       => 'ENUM',
+                'constraint' => ['admin', 'approver'],
                 'null'       => false,
             ],
             'approval_level' => [

@@ -35,9 +35,10 @@ class CreateBookingApprovalsTable extends Migration
                 'null'       => false,
             ],
             'status' => [
-                'type'    => "ENUM('pending','approved','rejected')",
-                'null'    => false,
-                'default' => 'pending',
+                'type'       => 'ENUM',
+                'constraint' => ['pending', 'approved', 'rejected'],
+                'null'       => false,
+                'default'    => 'pending',
             ],
             'notes' => [
                 'type' => 'TEXT',
