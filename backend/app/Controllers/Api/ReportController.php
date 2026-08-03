@@ -32,9 +32,11 @@ class ReportController extends Controller
     // -------------------------------------------------------------------------
     // Shared query builder
     // -------------------------------------------------------------------------
+    // buildQuery menerima parameter db, start_date, end_date, dan status
     private function buildQuery($db, string $startDate, string $endDate, ?string $status)
     {
         $builder = $db->table('bookings b')
+        // field yang mau diambil
             ->select('
                 b.id, b.booking_code, b.requester_name,
                 v.name AS vehicle_name, v.plate_number,
@@ -57,6 +59,7 @@ class ReportController extends Controller
             ->where('b.start_date <=', $endDate . ' 23:59:59')
             ->orderBy('b.created_at', 'ASC');
 
+            // ada status? filter
         if ($status !== null && $status !== '') {
             $builder->where('b.status', $status);
         }

@@ -20,6 +20,7 @@ class BookingService
     $chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $maxAttempts = 10;
 
+    // iterasi, max 10
     for ($attempts = 0; $attempts < $maxAttempts; $attempts++) {
         $randomStr = '';
         for ($i = 0; $i < 4; $i++) {
@@ -36,10 +37,12 @@ class BookingService
     throw new RuntimeException('Failed to generate a unique booking code.');
 }
 
+    // cek ketersediaan kendaraan
     public function isVehicleAvailable(int $vehicleId, string $startDate, string $endDate, ?int $excludeId = null): bool
     {
         $model = new BookingModel();
         
+        // cari kendaraan berdasarkan query
         $builder = $model->where('vehicle_id', $vehicleId)
                          ->whereIn('status', ['waiting_level_1', 'waiting_level_2', 'approved'])
                          ->where('start_date <', $endDate)
@@ -72,6 +75,7 @@ class BookingService
     {
         $db = Database::connect();
         
+        // cek ketersediaan kendaraan
         if (!$this->isVehicleAvailable((int)$data['vehicle_id'], $data['start_date'], $data['end_date'])) {
             throw new RuntimeException('Vehicle is not available for the selected dates.');
         }
@@ -82,6 +86,7 @@ class BookingService
         
         $bookingCode = $this->generateBookingCode();
         
+        // array yang disimpan ke tabel
         $bookingData = [
             'booking_code'   => $bookingCode,
             'admin_id'       => $adminId,
@@ -100,9 +105,12 @@ class BookingService
         $bookingModel = new BookingModel();
         $bookingApprovalModel = new BookingApprovalModel();
         
+        // simpan data
         $bookingModel->insert($bookingData);
+        // ambil id
         $bookingId = $bookingModel->getInsertID();
         
+        // insert ke tabel approval
         $bookingApprovalModel->insert([
             'booking_id'  => $bookingId,
             'approver_id' => $approverLevel1Id,

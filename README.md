@@ -7,7 +7,7 @@ Aplikasi web manajemen dan pemesanan kendaraan perusahaan tambang nikel dengan a
 ## Tech Stack
 
 | Layer    | Technology                  | Version    |
-|----------|-----------------------------|------------|
+| -------- | --------------------------- | ---------- |
 | Backend  | PHP + CodeIgniter 4         | PHP 8.2.30 |
 | Frontend | React + Vite + Tailwind CSS | React 19   |
 | Database | MySQL                       | 8.0.45     |
@@ -78,7 +78,7 @@ Akses di `http://localhost:5173`
 ## Akun Default
 
 | Role             | Email                 | Password |
-|------------------|-----------------------|----------|
+| ---------------- | --------------------- | -------- |
 | Admin            | admin@vehicle.com     | password |
 | Approver Level 1 | approver1@vehicle.com | password |
 | Approver Level 2 | approver2@vehicle.com | password |
@@ -116,25 +116,39 @@ Akses di `http://localhost:5173`
 ## Screenshot
 
 ### Login
+
 ![Login](docs/login.png)
 
 ### Dashboard Admin
+
 ![Dashboard Admin](docs/dashboard-admin.png)
 
 ### Buat Booking
+
 ![Buat Booking](docs/booking-create.png)
 
 ### Detail Booking
+
 ![Detail Booking](docs/booking-detail.png)
 
 ### Dashboard Approver
+
 ![Dashboard Approver](docs/dashboard-approver.png)
 
 ### Persetujuan
+
 ![Persetujuan](docs/approvals.png)
 
 ### Laporan
+
 ![Laporan](docs/reports.png)
 
 ### Activity Log
+
 ![Activity Log](docs/activity-log.png)
+
+---
+
+## Lisensi
+
+Project ini dilisensikan di bawah [MIT License](file:///d:/project/vehicle-booking/LICENSE).

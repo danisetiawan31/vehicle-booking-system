@@ -43,16 +43,19 @@ class BookingController extends Controller
             ->join('users u', 'u.id = b.admin_id')
             ->orderBy('b.created_at', 'DESC');
 
+        // approver hanya bisa melihat booking yang ditujukan kepadanya
         if ($authUser['role'] === 'approver') {
             $builder->join('booking_approvals ba', 'ba.booking_id = b.id')
                     ->where('ba.approver_id', $authUser['id']);
         }
 
+        // filter status
         $status = $this->request->getGet('status');
         if ($status !== null && $status !== '') {
             $builder->where('b.status', $status);
         }
 
+        // run query
         $bookings = $builder->get()->getResultArray();
 
         return $this->response
@@ -140,6 +143,7 @@ class BookingController extends Controller
                 ->setJSON(['status' => false, 'message' => 'Forbidden', 'data' => null]);
         }
 
+        // ambil data json fe, if null maka gunakan array kosong
         $json = $this->request->getJSON(true) ?? [];
 
         // CI4 validation
