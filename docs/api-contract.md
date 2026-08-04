@@ -90,6 +90,7 @@ Dokumen ini adalah acuan resmi (ground-truth) seluruh 23 REST API endpoint di ba
 - **`POST /api/drivers`**
   - **Body:** `name`, `license_number`, `phone`, `status` (`active`\|`inactive`).
 - **`PUT` & `DELETE`** $\rightarrow$ Mengikuti pola standar CRUD (Errors: 404 jika ID tidak ditemukan, 422 jika validasi gagal).
+- **`DELETE`** pada Vehicle/Driver yang masih direferensikan oleh booking manapun akan ditolak dengan **409 Conflict** (`{ "status": false, "message": "...", "data": null }`), sesuai constraint `ON DELETE RESTRICT` di database.
 
 ---
 

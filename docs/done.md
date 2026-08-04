@@ -9,7 +9,7 @@ Dokumen ini berisi catatan histori pengerjaan dan status final seluruh komponen 
 - **Status Proyek:** **SELESAI (100% Implemented & Verified)**
 - **Coverage:**
   - Backend REST API (6 Migration, 6 Model, 4 Service, 2 Filter, 8 Controller, 4 Seeder)
-  - Automated Testing Suite (43 Pest Tests, 145 Assertions Passed)
+  - Automated Testing Suite (95 Pest Tests, 250 Assertions Passed)
   - Frontend SPA (13 Pages, 3 Layouts, 8 Services, 7 Reusable Components, 9 Radix/shadcn Primitives)
 
 ---
@@ -57,8 +57,14 @@ Dokumen ini berisi catatan histori pengerjaan dan status final seluruh komponen 
 - [x] **Authorization Check `BookingController::show()` (Tahap 4):** Approver hanya dapat mengakses detail pemesanan jika terdaftar di `booking_approvals` (HTTP 403 jika unassigned) (`BookingShowAuthTest` 4 integration tests).
 - [x] **Filter Sequential Turn Dashboard Approver (Tahap 5):** `DashboardController::buildApproverDashboard()` memfilter `pending_bookings` & `summary.pending_for_me` secara akurat sesuai giliran level (`waiting_level_1` untuk Level 1, `waiting_level_2` untuk Level 2) (`DashboardApproverTest` 1 test case).
 - [x] **Cleanup Filters.php (Tahap 6):** Memangkas komentar impor mati dan baris duplikat alias `'cors' => Cors::class` di `app/Config/Filters.php`.
-- [x] **Regression Test & Fix UserController (Tahap 7a):** Penambahan validasi `approval_level` role `admin` pada `UserController::update()` & suite regresi `UserControllerTest` (15 test cases: CRUD, role validation, self-delete prevention, password filtering).
-- [x] **Global Pest Test Suite:** **43 Passed (145 Assertions)**.
+
+- [x] **Full Regression Coverage Modul Backend (Tahap 7):**
+  - **Tahap 7a (UserController):** Penambahan validasi `approval_level` role `admin` pada `UserController::update()` (menyamakan dengan `create()` yang sudah benar) & `UserControllerTest` (15 test cases: CRUD, role validation, self-delete prevention, password filtering).
+  - **Tahap 7b (VehicleController & DriverController):** Penanganan graceful `DatabaseException` (HTTP 409 Conflict) untuk penghapusan master data yang direferensikan booking (`ON DELETE RESTRICT`), serta `VehicleControllerTest` (15 test cases) & `DriverControllerTest` (12 test cases).
+  - **Tahap 7c (ReportController):** `ReportControllerTest` (8 test cases: validasi tanggal, filter status, otorisasi role, parsing binary `.xlsx` via PhpSpreadsheet).
+  - **Tahap 7d (ActivityLogController & ActivityLogService):** `ActivityLogControllerTest` (4 test cases: otorisasi admin, filter entity/date, paginasi >50 records) & `ActivityLogServiceTest` (13 test cases: coverage audit log untuk login, CRUD master data, create/approve/reject booking).
+  - **Catatan Deviasi:** Ditemukan `phpunit.xml.dist` belum mendaftarkan `suffix="Test.php"` di tag `<directory>`, menyebabkan sebagian file test tidak ter-discover saat run batch `vendor/bin/pest` (meski lolos saat dipanggil langsung per-file) — sudah diperbaiki, hasil full suite kini konsisten dengan penjumlahan manual per-file.
+- [x] **Global Pest Test Suite — Seluruh Backend Hardening & Test Suite (Tahap 1 s.d. 7d): 95 Passed (250 Assertions).**
 
 ---
 

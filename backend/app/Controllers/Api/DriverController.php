@@ -187,7 +187,17 @@ class DriverController extends Controller
                 ]);
         }
 
-        $model->delete($id);
+        try {
+            $model->delete($id);
+        } catch (\CodeIgniter\Database\Exceptions\DatabaseException $e) {
+            return $this->response
+                ->setStatusCode(409)
+                ->setJSON([
+                    'status'  => false,
+                    'message' => 'Driver cannot be deleted because it is referenced by existing bookings.',
+                    'data'    => null,
+                ]);
+        }
 
         $authUser = $this->getAuthUser();
         $activityLogService = new ActivityLogService();

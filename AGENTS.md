@@ -59,10 +59,14 @@ Instruksi kerja aktif untuk AI coding agent (Antigravity). Dibaca otomatis sebel
 - **Tes Otomatis Backend WAJIB:** Setiap endpoint/service backend yang diselesaikan dalam 1 langkah wajib memiliki tes otomatis Pest.
 - **Setup & Framework:** Menggunakan Pest (`composer require pestphp/pest --dev`), dengan base `TestCase` yang meng-extend `CodeIgniter\Test\CIUnitTestCase`. Setup dilakukan 1x di awal.
 - **Assertion Bisnis Nyata:** Tes wajib meng-assert aturan bisnis nyata (misal: penolakan bentrok jadwal overlap, penolakan self-approval, penolakan persetujuan di luar giliran), bukan sekadar tes tes kosmetik/boilerplate.
+- **Bug Ditemukan Saat Menulis Test:** Kalau saat menulis test regresi/baru ditemukan bug pada kode yang sudah ada (bukan kode yang sedang dikerjakan di langkah ini), klasifikasikan dulu:
+  - **Bug mekanis** — fix-nya mengikuti pola yang sudah ada & terverifikasi di codebase yang sama (misal: menyamakan validasi `update()` dengan `create()` yang sudah benar), TIDAK menyentuh auth/security/concurrency/data-integrity, dan TIDAK menciptakan keputusan desain baru (format response baru, HTTP status code baru, exception handling baru, dsb.) → **boleh langsung diperbaiki tanpa stop**. Laporkan di ringkasan akhir langkah sebagai "deviasi ditemukan & diperbaiki", sertakan before/after singkat.
+  - **Bug yang butuh keputusan desain** — melibatkan pilihan yang tidak jelas jawaban tunggalnya (exception granularity, HTTP status code baru, response envelope baru, atau apapun yang menyentuh auth/security/concurrency/data-integrity) → **WAJIB STOP**, laporkan dulu sebelum fix, sertakan usulan konkret. Jangan asumsikan sendiri.
 - **Batas Retry (Maksimal 2x):** Jika tes gagal, coba perbaiki maksimal 2 kali. Jika masih gagal setelah 2x percobaan: **STOP**. Laporkan ke user (tes yang gagal, error log, dan dugaan penyebab). Jangan lanjut ke langkah berikutnya dan jangan update `done.md`.
 - **Cakupan Tes (Test Scope):**
   - Default per langkah: Domain-scoped (contoh: `vendor/bin/pest tests/app/Services/BookingServiceTest.php`).
   - **Full Suite (`vendor/bin/pest`):** WAJIB dijalankan jika langkah tersebut mengubah file lintas-modul (`AuthContext`, `JwtAuthFilter`, base Model/Controller) atau sebelum suatu fitur ditutup secara formal di `done.md`.
+- **Berlaku Default:** Seluruh kebijakan di section ini (retry, full suite, kategori bug di atas) berlaku otomatis pada semua langkah kerja backend — tidak perlu diulang instruksinya di tiap prompt/spec individual.
 
 ---
 
