@@ -58,7 +58,12 @@ class Modules extends BaseModules
      *
      * @var array{only?: list<string>, exclude?: list<string>}
      */
-    public $composerPackages = [];
+    public $composerPackages = [
+        'exclude' => [
+            'pestphp/pest',
+            'pestphp/pest-plugin',
+        ],
+    ];
 
     /**
      * --------------------------------------------------------------------------

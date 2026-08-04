@@ -43,6 +43,10 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "db:reset": [
+            "@php spark migrate:refresh",
+            "@php spark db:seed MainSeeder"
+        ]
     }
 }

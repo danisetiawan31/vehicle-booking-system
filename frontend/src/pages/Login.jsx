@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 
 export default function Login() {
-  const { token, login } = useAuth();
+  const { token, user, login } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -25,8 +25,8 @@ export default function Login() {
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (token) navigate("/", { replace: true });
-  }, [token, navigate]);
+    if (token && user) navigate("/", { replace: true });
+  }, [token, user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,7 +52,7 @@ export default function Login() {
     }
   };
 
-  if (token) return null;
+  if (token && user) return null;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 p-4">

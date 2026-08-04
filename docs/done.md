@@ -65,6 +65,7 @@ Dokumen ini berisi catatan histori pengerjaan dan status final seluruh komponen 
   - **Tahap 7d (ActivityLogController & ActivityLogService):** `ActivityLogControllerTest` (4 test cases: otorisasi admin, filter entity/date, paginasi >50 records) & `ActivityLogServiceTest` (13 test cases: coverage audit log untuk login, CRUD master data, create/approve/reject booking).
   - **Catatan Deviasi:** Ditemukan `phpunit.xml.dist` belum mendaftarkan `suffix="Test.php"` di tag `<directory>`, menyebabkan sebagian file test tidak ter-discover saat run batch `vendor/bin/pest` (meski lolos saat dipanggil langsung per-file) — sudah diperbaiki, hasil full suite kini konsisten dengan penjumlahan manual per-file.
 - [x] **Global Pest Test Suite — Seluruh Backend Hardening & Test Suite (Tahap 1 s.d. 7d): 95 Passed (250 Assertions).**
+- [x] **Frontend Auth State & Infinite Loop Fix:** Memperbaiki sinkronisasi `token` & `user` pada `AuthProvider.jsx`, `Login.jsx`, `ProtectedRoute.jsx`, dan `App.jsx` untuk mencegah error `Maximum update depth exceeded` dan menjamin multi-browser/multi-session terisolasi sempurna.
 
 ---
 

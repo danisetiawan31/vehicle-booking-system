@@ -41,8 +41,8 @@ function AuthLayout() {
 }
 
 function RootRedirect() {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/login" replace />;
+  const { token, user } = useAuth();
+  if (!token || !user) return <Navigate to="/login" replace />;
   if (user.role === "admin") return <Navigate to="/admin/dashboard" replace />;
   if (user.role === "approver")
     return <Navigate to="/approver/dashboard" replace />;

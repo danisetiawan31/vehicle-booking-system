@@ -43,15 +43,19 @@ class BookingSeeder extends Seeder
             ['approved',        0,  0, 0],
             ['approved',        0,  1, 1],
             ['approved',        0,  2, 2],
-            // 2 waiting_level_1 — current month
+            // 4 waiting_level_1 — current month (giliran Level 1 pending)
             ['waiting_level_1', 0,  3, 0],
             ['waiting_level_1', 0,  0, 1],
-            // 2 waiting_level_2 — current month
-            ['waiting_level_2', 0,  1, 2],
-            ['waiting_level_2', 0,  2, 0],
+            ['waiting_level_1', 0,  1, 2],
+            ['waiting_level_1', 0,  2, 0],
+            // 4 waiting_level_2 — current month (Level 1 approved, giliran Level 2 pending)
+            ['waiting_level_2', 0,  3, 1],
+            ['waiting_level_2', 0,  0, 2],
+            ['waiting_level_2', 0,  1, 0],
+            ['waiting_level_2', 0,  2, 1],
             // 2 rejected — current month
-            ['rejected',        0,  3, 1],
-            ['rejected',        0,  0, 2],
+            ['rejected',        0,  3, 2],
+            ['rejected',        0,  0, 0],
             // 1 approved — different month (for chart data)
             ['approved',        -2, 1, 0],
         ];

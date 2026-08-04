@@ -12,6 +12,12 @@ class JwtService
     private function getSecret(): string
     {
         $secret = getenv('jwt.secret');
+        if ($secret === false) {
+            $secret = getenv('JWT_SECRET');
+        }
+        if ($secret === false) {
+            $secret = env('jwt.secret');
+        }
         if ($secret === false || $secret === null || trim((string)$secret) === '') {
             throw new RuntimeException('JWT secret key is not configured.');
         }
